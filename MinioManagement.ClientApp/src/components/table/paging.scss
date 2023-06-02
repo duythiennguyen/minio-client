@@ -1,0 +1,60 @@
+.table-pageing {
+  margin-bottom: "10px";
+  margin-top: "10px";
+}
+
+.table-select {
+}
+.root {
+  margin-top: "5rem";
+  padding-left: "15px";
+  padding-right: "15px";
+  display: "flex";
+  flex-direction: "column";
+  height: "auto";
+  width: "100%";
+}
+.spanYellow {
+  &:hover {
+    background-color: "#e0eefe!important";
+  }
+}
+.spanGreen {
+  display: "inline-block";
+  min-width: "10px";
+  padding: "3px 7px";
+  font-size: "12px";
+  line-height: "1";
+  color: "#fff";
+  text-align: "center";
+  white-space: "nowrap";
+  vertical-align: "middle";
+  background-color: "#00a65a";
+  border-radius: "10px";
+}
+.spanBlue {
+  display: "inline-block";
+  min-width: "10px";
+  padding: "3px 7px";
+  font-size: "12px";
+  line-height: "1";
+  color: "#fff";
+  text-align: "center";
+  white-space: "nowrap";
+  vertical-align: "middle";
+  background-color: "#3c8dbc";
+  border-radius: "10px";
+}
+.spanYellow {
+  display: "inline-block";
+  min-width: "10px";
+  padding: "3px 7px";
+  font-size: "12px";
+  line-height: "1";
+  color: "#fff";
+  text-align: "center";
+  white-space: "nowrap";
+  vertical-align: "middle";
+  background-color: "#f39c12";
+  border-radius: "10px";
+}

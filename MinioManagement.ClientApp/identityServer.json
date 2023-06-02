@@ -1,0 +1,49 @@
+{
+  "ApiScopes": [
+    {
+      "Name": "api.file"
+    }
+  ],
+  "ApiResources": [
+    {
+      "Name": "api.file",
+      "DisplayName": "File",
+      "Scopes": ["api.file"],
+      "ApiSecrets": [
+        { "Value": "nESmniYyktK80b5FopCmDCL9k7hdVzOcAZRZjOHTLY=" }
+      ]
+    }
+  ],
+  "Clients": [
+    {
+      "Enabled": true,
+      "ClientId": "sso",
+      "ClientName": "sso",
+      "ClientSecrets": [
+        { "Value": "nESmniYyktK80b5FopCmDCL9k7hdVzOcAZRZjOHTLY=" }
+      ],
+      "AllowedGrantTypes": ["client_credentials", "implicit"],
+      "AllowAccessTokensViaBrowser": true,
+      "RequireConsent": false,
+      "AllowedScopes": [
+        "openid",
+        "profile",
+        "api.sso",
+        "api.identityserver"
+      ],
+      "RedirectUris": [
+        "https://file.minhlong.com",
+        "https://file.minhlong.com/callback",
+        "https://file.minhlong.com/silent-renew.html"
+      ],
+      "PostLogoutRedirectUris": ["https://file.minhlong.com/"],
+      "AllowedCorsOrigins": ["https://file.minhlong.com"],
+      "SaveTokens": true,
+      "RequiredPkce": false,
+      "AccessTokenType": "Reference",
+      "AccessTokenLifetime": 57600,
+      "AuthorizationCodeLifetime": 57600,
+      "IdentityTokenLifetime": 57600
+    }
+  ]
+}

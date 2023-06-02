@@ -1,0 +1,101 @@
+{
+  "translation": {
+    "application": {
+      "editModel": "编辑/添加新应用",
+      "isCachePermission": "是否缓存权限",
+      "isEditPermission": "编辑权限",
+      "isEditPermissionGroup": "编辑权限组",
+      "isEditUser": "编辑用户",
+      "listUser": "列出用户",
+      "moduleName": "模块名称",
+      "name": "应用名称",
+      "titleTable": "上市申请"
+    },
+    "common": {
+      "HeadOfDepartment": "部门主管",
+      "account": "帐户",
+      "accountName": "全名",
+      "action": "功能",
+      "actionDelete": "你确定你要删除",
+      "actionError": "操作失败，请重试",
+      "actionSuccess": "操纵成功",
+      "add": "添加",
+      "addUser": "添加新员工",
+      "addUserInApp": "将员工添加到应用程序",
+      "application": "应用",
+      "applicationIdIsExist": "应用程序密钥存在",
+      "cancel": "取消",
+      "close": "关闭",
+      "companyId": "公司/代理代码",
+      "createdDate": "创建日期",
+      "createdUser": "造物主",
+      "delete": "删除",
+      "departmentId": "零件代号",
+      "description": "描述",
+      "duplicate": "复制",
+      "edit": "编辑",
+      "exportCsv": "出口报告CSV",
+      "exportReport": "出口报告",
+      "filter": "筛选",
+      "fullName": "员工的名字",
+      "function": "功能",
+      "id": "美国",
+      "idOrName": "身份证或姓名",
+      "inUse": "地位",
+      "isLock": "锁起来",
+      "name": "姓名",
+      "permissionGroupIdIsExist": "权限组代码已存在",
+      "permissionIdIsExist": "权限码已经存在",
+      "phoneNumber": "话号码",
+      "pleaseEnter": "请输入！",
+      "required": "请输入必填字段",
+      "rowNumber": "行号",
+      "save": "保存",
+      "search": "搜索",
+      "status": "地位",
+      "statusInUse": "正在使用",
+      "statusNoUse": "不使用",
+      "update": "更新",
+      "url": "网址",
+      "userId": "员工代码"
+    },
+    "menu": {
+      "application": "应用",
+      "permission": "允许",
+      "permissionGroup": "维权组",
+      "user": "帐户"
+    },
+    "message": {
+      "accountName": "没有数据",
+      "confirmDelete": "您确定要删除数据吗？",
+      "errorExcution": "执行过程中出现错误",
+      "permissionChooseRequired": "需要权限选择"
+    },
+    "permission": {
+      "editModel": "编辑/添加编辑权限",
+      "id": "授权码",
+      "titleTable": "权限列表",
+      "userQC": "QC人员代码适用"
+    },
+    "permissionGroup": {
+      "active": "积极的",
+      "groupDelete": "删除群组",
+      "isApprove": "浏览器",
+      "isDelete": "擦除",
+      "isExport": "导出报告",
+      "isInsert": "添新",
+      "isPrintPDF": "打印PDF",
+      "isReport": "报告",
+      "isReview": "审查",
+      "isUpdate": "更新",
+      "isView": "看",
+      "listPermission": "权限列表",
+      "titleTable": "权限组列表",
+      "userDelete": "删除帐号"
+    },
+    "user": {
+      "add": "将帐户添加到应用程序",
+      "editModel": "编辑帐户"
+    }
+  }
+}

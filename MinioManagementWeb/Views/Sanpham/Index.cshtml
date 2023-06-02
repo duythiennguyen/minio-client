@@ -1,0 +1,537 @@
+@{
+    ViewData["Title"] = "Upload file";
+    var sanPhamInfoList = ViewBag.SanPhamInfoList as List<SanPhamInfo>;
+    var listESanPhamFolderType = Enum.GetValues(typeof(ESanPhamFolderType));
+    var listSanPhamFolderType = new List<string>() { "Hình đại diện", "Hình nhỏ", "Video" };
+
+    var listThuongHieu = ViewBag.GetListThuongHieu as IEnumerable<ThuongHieuInfo> ?? new List<ThuongHieuInfo>();
+    var listBo = (ViewBag.GetListBo as IEnumerable<BoInfo> ?? new List<BoInfo>())?.OrderByDescending(x => x.Name);
+    var listHoavan = (ViewBag.GetListHoavan as IEnumerable<HoaVanInfo> ?? new List<HoaVanInfo>())?.OrderByDescending(x =>
+    x.Name);
+}
+<div class="container">
+
+    <form id="frmSearch" action="/SanPham/Search" method="post" class="row g-3">
+        <div class="col-md-3">
+            <label for="inputFileStatus" class="form-label">Tình trạng file</label>
+            <select id="inputFileStatus" class="form-select">
+                <option value="-1">Chọn...</option>
+                <option value="0">Chưa có file</option>
+                <option value="1">Đã có file</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="inputTH" class="form-label">Thương Hiệu</label>
+            <select id="inputTH" class="form-select">
+                <option value="-1">Chọn...</option>
+                @foreach (var item in listThuongHieu)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="inputBo" class="form-label">Bộ</label>
+            <select id="inputBo" class="form-select">
+                <option value="-1">Chọn...</option>
+                @foreach (var item in listBo)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="inputHoaVan" class="form-label">Hoa Văn </label>
+            <select id="inputHoaVan" class="form-select">
+                <option value="-1">Chọn...</option>
+                @foreach (var item in listHoavan)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-12">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="txtSearch"
+                    placeholder="Nhập id, tên hoặc url file sản phẩm ">
+                <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </form>
+
+    <div class="d-flex flex-row-reverse">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalImport" id="btnImport"
+            type="button"> Import Excel <i class="fa-solid fa-file-csv"></i>
+        </button>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12" id="divListSanPham">
+            @* <table class="table table-light mb-0">
+            <thead class="thead-light">
+            <tr>
+            <th>#</th>
+            <th>Sản phẩm</th>
+            <th>Dự án</th>
+            <th>Bộ</th>
+            <th>Hoa văn</th>
+            <th>
+            </th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+            var stt = 0;
+            foreach (var item in sanPhamInfoList)
+            {
+            <tr>
+            <td>@(++stt)</td>
+            <td>@item.Name</td>
+            <td>@item.ProjectName</td>
+            <td>@item.BoName</td>
+            <td>@item.HoavanName</td>
+            <td>
+            <button title="Upload" data-spid="@item.Id" data-spname="@item.Name" type="button"
+            class="btn btn-primary btnUpload" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            </button>
+
+            <button title="Thống kê" data-spid="@item.Id" data-spname="@item.Name" type="button"
+            class="btn btn-success btnThongKe" data-bs-toggle="modal"
+            data-bs-target="#modalThongKe">
+            <i class="fa-solid fa-chart-bar"></i></button>
+            </td>
+            </tr>
+            }
+            }
+            </tbody>
+            </table>
+            <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+            <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            </a>
+            </li>
+            </ul>
+            </nav> *@
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalImport" tabindex="-1" aria-labelledby="modalImportLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <form class="modal-content" id="frmImport" action="Sanpham/Import" method="post"
+                enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalImportLabel">Import File</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-step active" id="step1">
+                        <div class="mb-3">
+                            <label for="inputImportTemplate" class="form-label">Bước 1: Chọn File Excel Template</label>
+                            <input class="form-control" type="file" id="inputImportTemplate" name="inputImportTemplate"
+                                required>
+                        </div>
+
+                    </div>
+                    <div class="form-step" id="step2">
+                        <div class="mb-3">
+                            <label for="inputImportFiles" class="form-label">Bước 2: Chọn File Cần Upload</label>
+                            <input class="form-control" type="file" id="inputImportFiles" name="file[]" multiple
+                                required>
+                        </div>
+                        <div class="progress mt-3">
+                            <div id="progressBar2" class="progress-bar" role="progressbar"></div>
+                        </div>
+                    </div>
+
+                    <table id="jsonTable" class="table table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Error Message</th>
+                                <th>Succeed</th>
+                                <th> Failed</th>
+                                <th>Folder</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="prevButton" disabled onclick="prevStep()"><i
+                            class="fa-solid fa-circle-left"></i></button>
+                    <button type="button" class="btn btn-primary" id="nextButton" onclick="nextStep()"><i
+                            class="fa-solid fa-circle-right"></i></button>
+                    <button type="submit" class="btn btn-primary" style="display: none;"
+                        id="uploadButton">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" aria-hidden="true" id="modalThongKe" tabindex="-1" aria-labelledby="modalThongKeLabel"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-lg  modal-dialog-scrollable">
+            <div class="modal-content" id="divDSThongKe">
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
+            <form id="frmSanpham" action="Sanpham/Upload" method="post" enctype="multipart/form-data"
+                class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <h2 class="fs-5">Vui lòng chọn file</h2>
+                        <div class="col-md-4">
+                            <input type="file" name="file[]" class="form-control-file" id="files" multiple required>
+                        </div>
+
+                    </div>
+                    <div class="progress mt-3">
+                        <div id="progressBar" class="progress-bar" role="progressbar"></div>
+                    </div>
+                    <hr>
+                    <div class="row" id="divDS">
+
+                        <div class="col-md-6">
+                            <label>Danh sách thành công</label>
+                            <div id="divDSTC" class="row">
+                                <a class="text-success"
+                                    href="http://minhlongq3.southeastasia.cloudapp.azure.com/Project1/Bo-1/HoaVan-3/7/mc (1).exe">ASDADADA</a>
+                                <a class="text-success"
+                                    href="http://minhlongq3.southeastasia.cloudapp.azure.com/Project1/Bo-1/HoaVan-3/7/mc (1).exe">ASDADADA</a>
+
+                            </div>
+                            <br>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Danh sách thất bại</label>
+                            <div id="divDSTB" class="row">
+                                <b class="text-danger">ASDADADA</b>
+                                <b class="text-danger">ASDADADA</b>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    let pageIndex = 1;
+
+    let maxFileSize = @ViewBag.MultipartBodyLengthLimit;
+    var choosingUpload = -1;
+    var choosingUploadFileName = "";
+    var choosingFolder = "";
+
+    function Search() {
+        var proj = $('#inputTH')[0].value;
+        var bo = $('#inputBo')[0].value;
+        var hoavan = $('#inputHoaVan')[0].value;
+        var txtSearch = $('#txtSearch')[0].value;
+        var statusFile = $('#inputFileStatus')[0].value;
+        var data = {
+            boid: bo,
+            hoavanid: hoavan,
+            thuonghieuid: proj,
+            keyword: txtSearch,
+            pageindex: pageIndex,
+            isexistfile: statusFile
+        };
+
+        $('#spinner-overlay').toggle();
+        $.post('/SanPham/Search', data, (res) => {
+            $('#divListSanPham').html(res);
+
+            $('#spinner-overlay').toggle();
+        });
+    }
+    $().ready(() => {
+    @* Search(); *@
+            $('#frmSearch').submit((e) => {
+                e.preventDefault();
+                pageIndex = 1;
+                Search();
+            });
+
+        $('#files').change((e) => {
+            var input = document.getElementById("files");
+            for (var i = 0; i < input.files.length; i++) {
+                var file = input.files[i];
+
+                // Kiểm tra kích thước file
+                if (file.size > 1000000 * maxFileSize) {
+                    alert("Kích thước file [" + file.name + "] không được vượt quá " + maxFileSize + " MBs");
+                    $('#frmSanpham')[0].reset();
+                    break;
+                }
+            }
+        })
+
+
+
+    });
+
+</script>
+
+<script>
+
+
+
+
+    var currentStep = 1;
+
+    function nextStep() {
+        if (currentStep == 1) {
+
+            console.log($('#inputImportTemplate')[0].files.length);
+            if ($('#inputImportTemplate')[0].files.length == 0) {
+                alert('Vui lòng chọn file');
+                return;
+
+            }
+        }
+
+        var currentStepDiv = document.getElementById("step" + currentStep);
+        currentStepDiv.classList.remove("active");
+
+        currentStep++;
+        var nextStepDiv = document.getElementById("step" + currentStep);
+        nextStepDiv.classList.add("active");
+
+        updateButtons();
+    }
+
+    function prevStep() {
+        var currentStepDiv = document.getElementById("step" + currentStep);
+        currentStepDiv.classList.remove("active");
+
+        currentStep--;
+        var prevStepDiv = document.getElementById("step" + currentStep);
+        prevStepDiv.classList.add("active");
+
+        updateButtons();
+    }
+
+    function updateButtons() {
+        var prevButton = document.getElementById("prevButton");
+        var nextButton = document.getElementById("nextButton");
+        var uploadButton = document.getElementById("uploadButton");
+
+        prevButton.disabled = currentStep === 1;
+        nextButton.disabled = currentStep === 2;
+        uploadButton.style.display = currentStep === 2 ? "block" : "none";
+    }
+
+    $().ready(() => {
+
+        $('#frmImport').submit((e) => {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Bạn có chắc không?',
+                text: "Tải những file này lên server!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Không',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Có',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var files = $("#inputImportFiles").prop("files");
+                    var formData = new FormData();
+                    for (var i = 0; i < files.length; i++) {
+                        formData.append("formFiles", files[i]);
+                    }
+                    console.log(formData);
+
+                    var file = document.getElementById('inputImportTemplate').files[0];
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        var data = new Uint8Array(e.target.result);
+                        var workbook = XLSX.read(data, { type: 'array' });
+                        var sheet = workbook.Sheets[workbook.SheetNames[0]];
+                        var jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                        console.log(sheet);
+                        console.log(jsonData);
+                        console.log(JSON.stringify(jsonData));
+
+                        if (jsonData[0][0] != 'id' || jsonData[0][2] != 'files' || jsonData[0][1] != 'folder') {
+                            Swal.fire({
+                                title: '<strong>Lỗi Template</strong>',
+                                icon: 'error',
+                                html:
+                                    'Format Template không hợp lệ',
+                                focusConfirm: false,
+                                confirmButtonText:
+                                    '<i class="fa fa-thumbs-up"></i> OK!',
+                                confirmButtonAriaLabel: 'Thumbs up, great!',
+                            });
+                            $('#inputImportTemplate').val('');
+                            prevStep();
+
+                            return;
+                        }
+
+                        // Tạo một đối tượng để lưu trữ các file, số lượng xuất hiện và vị trí xuất hiện
+                        var fileData = {};
+                        // Lặp qua các phần tử trong mảng JSON từ index 1 (bỏ qua ["id", "files"])
+                        for (var i = 1; i < jsonData.length; i++) {
+                            var files = jsonData[i][2].split(","); // Tách chuỗi files thành một mảng các tên file
+                            console.log(files);
+                            // Lặp qua các file trong mảng
+                            for (var j = 0; j < files.length; j++) {
+                                var file = files[j].trim(); // Xóa khoảng trắng xung quanh tên file
+
+                                // Kiểm tra nếu file đã tồn tại trong đối tượng fileData
+                                if (fileData[file]) {
+                                    fileData[file].count++; // Tăng số lượng xuất hiện lên 1
+                                    fileData[file].positions.push(jsonData[i][0] + "/" + jsonData[i][1]); // Lưu trữ vị trí xuất hiện
+                                } else {
+                                    // Nếu file chưa tồn tại trong đối tượng fileData, tạo một đối tượng mới
+                                    fileData[file] = {
+                                        count: 1,
+                                        positions: [jsonData[i][0] + "/" + jsonData[i][1]]
+                                    };
+                                }
+                            }
+                        }
+                        var messageDuplicateFile = "";
+                        // Kiểm tra các file có số lượng xuất hiện lớn hơn 1
+                        for (var file in fileData) {
+                            if (fileData[file].count > 1) {
+                                messageDuplicateFile += "<strong>" + JSON.stringify(file) + '</strong>';
+                                messageDuplicateFile += " Vị trí xuất hiện: " + JSON.stringify(fileData[file].positions.join(", ")) + '<br>';
+                            }
+                        }
+                        if (messageDuplicateFile != "") {
+                            Swal.fire({
+                                title: '<strong>Phát hiện file trùng lặp</strong>',
+                                icon: 'error',
+                                html:
+                                    messageDuplicateFile,
+                                focusConfirm: false,
+                                confirmButtonText:
+                                    '<i class="fa fa-thumbs-up"></i> Vui lòng xem lại file template!',
+                                confirmButtonAriaLabel: 'Thumbs up, great!',
+                            });
+                            $('#inputImportTemplate').val('');
+                            prevStep();
+                            return;
+                        }
+
+                        var requestImportFiles = [];
+                        for (var i = 1; i < jsonData.length; i++) {
+                            var id = jsonData[i][0];
+                            var files = jsonData[i][2].split(",").map(item => item.trim());
+
+                            var folder = jsonData[i][1];
+                            requestImportFiles.push({ id: id, files: files, folder: folder });
+                        }
+
+                        console.log(requestImportFiles);
+                        formData.append("json", JSON.stringify(requestImportFiles));
+                        $.ajax(
+                            {
+                                url: "/SanPham/Import",
+                                type: "POST",
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                beforeSend: function () {
+                                    $('#spinner-overlay').toggle();
+                                    $("#progressBar2").width("0%");
+                                },
+                                xhr: function () {
+                                    var xhr = new window.XMLHttpRequest();
+                                    xhr.upload.addEventListener("progress", function (e) {
+                                        if (e.lengthComputable) {
+                                            var progress = (e.loaded / e.total) * 100;
+                                            $("#progressBar2").width(progress + "%").text(progress.toFixed(2) + "%");
+                                        }
+                                    });
+                                    return xhr;
+                                },
+                                success: function (result) {
+
+                                    console.log(result);
+
+                                    toastr["success"]("Thành công");
+
+                                    $.each(result, function (index, data) {
+                                        var row = $("<tr>");
+                                        row.append($("<td>").text(data.id));
+                                        row.append($("<td>").text(data.errorMessage));
+
+                                        var succeedFiles = $("<td>");
+                                        $.each(data.listFilesUploadSucceed, function (i, file) {
+                                            var link = $("<a>").attr("href", file).text(file);
+                                            var truncatedLink = $("<div>").addClass("truncate").append(link);
+                                            succeedFiles.append(truncatedLink).append("<br>");
+                                        });
+                                        row.append(succeedFiles);
+
+                                        row.append($("<td>").text(data.listFilesUploadFailed.join(", ")));
+                                        row.append($("<td>").text(data.folder));
+                                        $("#jsonTable tbody").append(row);
+                                    });
+
+                                    $('#spinner-overlay').toggle();
+
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log(error);
+                                    toastr["error"]("Lỗi hệ thống");
+                                    $('#spinner-overlay').toggle();
+
+                                    $("#progressBar2").width("0%");
+                                }
+                            });
+                    };
+
+                    reader.readAsArrayBuffer(file);
+
+
+
+                }
+            });
+        });
+    });
+</script>
+

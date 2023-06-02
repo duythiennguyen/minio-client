@@ -1,0 +1,101 @@
+{
+  "translation": {
+    "application": {
+      "editModel": "Edit/add new apps",
+      "isCachePermission": "Is cache permission",
+      "isEditPermission": "Edit permission",
+      "isEditPermissionGroup": "Edit/Add permission group",
+      "isEditUser": "Edit user",
+      "listUser": "List user",
+      "moduleName": "Module Name",
+      "name": "Application name",
+      "titleTable": "List Application"
+    },
+    "common": {
+      "HeadOfDepartment": "Head of department",
+      "account": "Accout",
+      "accountName": "Full name",
+      "action": "Action",
+      "actionDelete": "Are you sure you want to delete",
+      "actionError": "Operation failed, please try again",
+      "actionSuccess": "Operation was successful",
+      "add": "Add",
+      "addUser": "Add new staff",
+      "addUserInApp": "Add employees to the app",
+      "application": "Application",
+      "applicationIdIsExist": "Application key exist",
+      "cancel": "Cancel",
+      "close": "Close",
+      "companyId": "Company ID",
+      "createdDate": "Create Date",
+      "createdUser": "Create User",
+      "delete": "Delete",
+      "departmentId": "Department Id",
+      "description": "Description",
+      "duplicate": "Duplicate",
+      "edit": "Edit",
+      "exportCsv": "Export report CSV",
+      "exportReport": "Export report",
+      "filter": "Filter",
+      "fullName": "Employee's name",
+      "function": "Function",
+      "id": "Id",
+      "idOrName": "ID or Name",
+      "inUse": "In use",
+      "isLock": "Key",
+      "name": "Name",
+      "permissionGroupIdIsExist": "Permission group code already exists",
+      "permissionIdIsExist": "Permission code already exists",
+      "phoneNumber": "Phone",
+      "pleaseEnter": "Please enter",
+      "required": "Please enter required fields",
+      "rowNumber": "Row number",
+      "save": "Save",
+      "search": "Search",
+      "status": "Status",
+      "statusInUse": "In use",
+      "statusNoUse": "No use",
+      "update": "Update",
+      "url": "Url",
+      "userId": "User Id"
+    },
+    "menu": {
+      "application": "Application",
+      "permission": "Permission",
+      "permissionGroup": "Permission group",
+      "user": "Account"
+    },
+    "message": {
+      "accountName": "No data",
+      "confirmDelete": "Are you sure you want to delete the data?",
+      "errorExcution": "There was an error during execution",
+      "permissionChooseRequired": "Permission choose required"
+    },
+    "permission": {
+      "editModel": "Edit/Add permission",
+      "id": "Permission ID",
+      "titleTable": "List permission",
+      "userQC": "User QC "
+    },
+    "permissionGroup": {
+      "active": "Active",
+      "groupDelete": "Group delete",
+      "isApprove": "Approve",
+      "isDelete": "Delete",
+      "isExport": "Export",
+      "isInsert": "Is insert",
+      "isPrintPDF": "Print PDF",
+      "isReport": "Report",
+      "isReview": "Review",
+      "isUpdate": "Update",
+      "isView": "View",
+      "listPermission": "List permission",
+      "titleTable": "List of permission groups",
+      "userDelete": "User delete"
+    },
+    "user": {
+      "add": "Add an account to the app",
+      "editModel": "Edit User"
+    }
+  }
+}

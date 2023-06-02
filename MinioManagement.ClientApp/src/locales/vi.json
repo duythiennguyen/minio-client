@@ -1,0 +1,101 @@
+{
+  "translation": {
+    "application": {
+      "editModel": "Chỉnh sửa/ thêm mới ứng dụng",
+      "isCachePermission": "Lưu cache quyền",
+      "isEditPermission": "Chỉnh sửa quyền",
+      "isEditPermissionGroup": "Chỉnh sửa/ thêm mới nhóm quyền",
+      "isEditUser": "Chỉnh sửa user",
+      "listUser": "Danh sách nhân viên",
+      "moduleName": "Tên chức năng",
+      "name": "Tên ứng dụng",
+      "titleTable": "Danh sách ứng dụng"
+    },
+    "common": {
+      "HeadOfDepartment": "Trưởng bộ phận",
+      "account": "Tài khoản",
+      "accountName": "Họ tên",
+      "action": "Chức năng",
+      "actionDelete": "bạn có chắc muốn xóa ",
+      "actionError": "Thao tác không thành công. vui lòng thử lại",
+      "actionSuccess": "Thao tác thành công",
+      "add": "Thêm mới",
+      "addUser": "Thêm mới nhân viên",
+      "addUserInApp": "Thêm nhân viên vào ứng dụng",
+      "application": "Ứng dụng",
+      "applicationIdIsExist": "Mã ứng dụng đã tồn tại",
+      "cancel": "Hủy",
+      "close": "Đóng",
+      "companyId": "Mã công ty/ Đại lý",
+      "createdDate": "Ngày tạo",
+      "createdUser": "Người tạo",
+      "delete": "Xóa",
+      "departmentId": "Mã bộ phận",
+      "description": "Mô tả",
+      "duplicate": "Trùng lặp dữ liệu",
+      "edit": "Chỉnh sửa",
+      "exportCsv": "Xuất báo cáo file .CSV",
+      "exportReport": "Xuất báo cáo",
+      "filter": "Bộ lọc",
+      "fullName": "Họ tên nhân viên",
+      "function": "Chức năng",
+      "id": "Mã",
+      "idOrName": "Mã hoặc tên",
+      "inUse": "Tình trạng",
+      "isLock": "Khóa",
+      "name": "Tên",
+      "permissionGroupIdIsExist": "Mã nhóm quyền đã tồn tại",
+      "permissionIdIsExist": "Mã quyền đã tồn tại",
+      "phoneNumber": "Điện thoại",
+      "pleaseEnter": "Vui lòng nhập!",
+      "required": "Vui lòng nhập những trường bắt buộc",
+      "rowNumber": "Số dòng",
+      "save": "Lưu lại",
+      "search": "Tìm kiếm",
+      "status": "Trạng thái",
+      "statusInUse": "Sử dụng",
+      "statusNoUse": "không sử dụng",
+      "update": "Cập nhật",
+      "url": "Liên kết",
+      "userId": "Mã nhân viên"
+    },
+    "menu": {
+      "application": "Ứng dụng",
+      "permission": "Quyền",
+      "permissionGroup": "Nhóm quyền",
+      "user": "Tài khoản"
+    },
+    "message": {
+      "accountName": "Không có dữ liệu để hiển thị",
+      "confirmDelete": "Bạn có chắc chắn muốn xóa dữ liệu?",
+      "errorExcution": "Có lỗi trong quá trình thực thi",
+      "permissionChooseRequired": "Quyền bắt buộc chọn"
+    },
+    "permission": {
+      "editModel": "Chỉnh sửa/ thêm mới quyền",
+      "id": "Mã phân quyền",
+      "titleTable": "Danh sách quyền",
+      "userQC": "Mã nhân viên QC áp dụng"
+    },
+    "permissionGroup": {
+      "active": "Hoạt động",
+      "groupDelete": "Xóa nhóm",
+      "isApprove": "Duyệt",
+      "isDelete": "Xóa",
+      "isExport": "Xuất BC",
+      "isInsert": "Thêm mới",
+      "isPrintPDF": "Xuất PDF",
+      "isReport": "Báo cáo",
+      "isReview": "Xem lại",
+      "isUpdate": "Cập nhật",
+      "isView": "Xem",
+      "listPermission": "Danh sách quyền",
+      "titleTable": " Danh sách nhóm quyền",
+      "userDelete": "Xóa tài khoản"
+    },
+    "user": {
+      "add": "Thêm tài khoản vào ứng dụng",
+      "editModel": "Chỉnh sửa tài khoản"
+    }
+  }
+}

@@ -1,0 +1,146 @@
+@model List<VmFileItem>;
+@{
+    var listView = new Dictionary<string, List<VmFileItem>>();
+    var listSuffixFolderTypes = AppConfig.ListSuffixFolderTypes;
+
+    foreach (var item in listSuffixFolderTypes)
+    {
+        var lstByFolderType = Model.Where(x => x.FolderType.Contains(item)).ToList();
+        listView.Add(item, lstByFolderType);
+    }
+
+
+    var lstAvatar = Model.Where(x => x.FolderType.Contains("avatar"));
+    var lstImg = Model.Where(x => x.FolderType.Contains("image"));
+    var lstVideo = Model.Where(x => x.FolderType.Contains("video"));
+
+    var activeCheck = true;
+}
+<div class="modal-header">
+    <h1 class="modal-title fs-5" id="modalThongKeLabel">Thống kê @ViewBag.SanPhamName</h1>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="d-flex align-items-start row">
+
+        <div class="nav flex-column nav-pills me-0 col-md-4" id="v-pills-tab" role="tablist"
+            aria-orientation="vertical">
+            @foreach (var item in listSuffixFolderTypes)
+            {
+                var active = activeCheck ? "active" : "";
+                <button class="folder-tab nav-link " data-foldertype="@item" id="v-pills-@item-tab" data-bs-toggle="pill"
+                    data-bs-target="#v-pills-@item" type="button" role="tab" aria-controls="v-pills-@item"
+                    aria-selected="false">@item
+                    <span class="badge bg-primary rounded-pill">@listView[item].Count</span>
+                </button>
+                activeCheck = false;
+            }
+
+        </div>
+
+        @{
+            activeCheck = true;
+        }
+        <div class="tab-content col-md-8" id="v-pills-tabContent">
+            @foreach (var item in listSuffixFolderTypes)
+            {
+                var active = activeCheck ? " show active bg-primary" : "";
+                var lst = listView[item];
+                <div class="tab-pane fade " id="v-pills-@item" role="tabpanel" aria-labelledby="v-pills-@item" tabindex="0">
+                    <div class="list-group">
+                        <div class="list-group-item list-group-item-action my-item-link-result bg-light">
+                            <div class="row">
+                                <label class="col-md-10 " style="font-size: larger;font-weight: bold;">Danh sách tập tin
+                                </label>
+                                <button class="col-md-2 btn btn-primary ml-0 btnUpload2" data-foldertype="@item"
+                                    type="button" data-bs-target="#exampleModal" data-bs-toggle="modal">
+                                    <i class="fa-solid fa-square-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        @foreach (var item2 in lst)
+                        {
+
+                            @if (User.IsInRole("admin"))
+                            {
+                                <button class="col-md-2 btn btn-primary list-group-item list-group-item-action my-item-link-result btnWatch" data-url="@item2.Url">
+                                        @item2.FileName
+                                </button>
+                            }
+                            else
+                            {
+                                <a href="@item2.Url" class="list-group-item list-group-item-action my-item-link-result">
+                                    @item2.FileName
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+                activeCheck = false;
+            }
+
+        </div>
+
+        <div class="row mt-2" id="divIMG">
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button type="button" title="Refresh" class="btn btn-primary" id="btnRefresh"><i
+            class="fa-solid fa-arrows-rotate"></i></button>
+</div>
+
+
+<script>
+    $().ready(() => {
+        var activeTab = '@listView.Keys.FirstOrDefault()';
+        if (choosingFolder == "") {
+            $('#v-pills-' + activeTab + '-tab').click();
+        }
+
+
+        $('.folder-tab, .btnUpload2').click((e) => {
+            choosingFolder = e.currentTarget.dataset["foldertype"];
+        });
+
+        $('#btnRefresh').click((e) => {
+            $.post('/SanPham/LoadThongKe/', { sanPhamID: choosingUpload }, (res) => {
+                $('#divDSThongKe').html(res);
+                $('#v-pills-' + choosingFolder + '-tab').click()
+            });
+        });
+
+        $('.btnWatch').click((e) => {
+            console.log(e);
+            var url = e.currentTarget.dataset["url"];
+            $.post('/SanPham/GetPrivateFileFromFolderByURL/', { url: url }, (res) => {
+                console.log(res);
+                var container = document.getElementById('divIMG');
+                if(res.fileType == 'image'){
+                    var img = document.createElement('img');
+                    img.src = res.presignURL;
+                    img.alt = 'Mô tả hình ảnh';
+                    img.width = 300;
+                    img.height = 200;
+                    img.className = 'col-md-6';
+
+                    container.appendChild(img);
+
+                }else if(res.fileType == 'video'){
+                    var video = document.createElement("video");
+                    video.src = res.presignURL;
+                    video.controls = true;
+                    video.width = 300;
+                    video.height = 200;
+                    container.appendChild(video);
+
+                }
+
+                
+            });
+        });
+
+
+    });
+</script>

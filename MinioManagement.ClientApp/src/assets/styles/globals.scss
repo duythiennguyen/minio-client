@@ -1,0 +1,71 @@
+//https://viblo.asia/p/nhung-kien-thuc-co-ban-ve-sassscss-gDVK29vm5Lj
+$font-family: Inter, sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+  Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+  "Segoe UI Emoji", "Segoe UI Symbol";
+
+$size: 30;
+$text_size: $size * 1px;
+$text_size_string: $size + px;
+
+$name: content-test;
+$attr_bg: background;
+
+@mixin fontDefault {
+  font-size: 32px;
+  font-weight: 700;
+  @content;
+}
+
+div.#{$name} {
+  #{$attr_bg}-color: red;
+  @include fontDefault {
+    border-bottom: 1px solid gray;
+  }
+}
+
+body {
+  font-family: $font-family;
+  &:focus {
+    // ->class sẽ thành body:focus
+  }
+  &_test {
+    // -> class sẽ thành body_test
+  }
+}
+
+
+///////////////////////////////////////////////////
+.scrollbar-container .nav-link a {
+  width: 100%;
+  &.active {
+    box-shadow: rgba(58, 53, 65, 0.42) 0px 4px 8px -4px;
+    background-image: linear-gradient(
+      98deg,
+      rgb(198, 167, 254),
+      rgb(145, 85, 253) 94%
+    );
+    border-radius: 0px 100px 100px 0px;
+  }
+}
+.menu-left-box-shadow{
+  box-shadow: 0 14px 28px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.22)!important;
+}
+.MuiDialogContent-root {
+  padding-top: 15px !important;
+}
+.full-width {
+  width: 100%;
+}
+.nav-header.MuiBox-root {
+  top: 70px !important;
+  height: 38px !important;
+}
+.css-1ae0pmy .css-1ehinyh {
+  min-height: 71px !important;
+}
+.relogin-page {
+  width: 500px;
+  margin: auto;
+  text-align: center;
+  font-size: 23px;
+}

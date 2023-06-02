@@ -1,0 +1,282 @@
+@model List<SearchSanPhamResult>;
+@{
+    var listSuffixFolderTypes = AppConfig.ListSuffixFolderTypes;
+}
+
+Tổng: @(Model.Count > 0 ? Model[0].TotalRow : 0) sản phẩm
+
+<table class="table table-light mb-0">
+    <thead class="thead-light">
+        <tr>
+            <th>#</th>
+            <th>Sản phẩm</th>
+            <th>Thương hiệu</th>
+            <th>Bộ</th>
+            <th>Hoa văn</th>
+            @foreach (var item in listSuffixFolderTypes)
+            {
+                <th>@item</th>
+            }
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Count > 0)
+        {
+
+
+            @* var stt = 1 * (ViewBag.PageIndex - 1) * ViewBag.PageSize + 1; *@
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td data-bs-toggle="tooltip" data-bs-title="@item.Id" style="cursor: pointer;">@item.Row</td>
+                    <td>@item.Name</td>
+                    <td>@item.ThuonghieuName</td>
+                    <td>@item.BoName</td>
+                    <td>@item.HoavanName</td>
+                    @foreach (var suffix in listSuffixFolderTypes)
+                    {
+                        var lstByFolderType = item.ListFiles.Where(x => x.FolderType.Contains(suffix)).ToList();
+                        <td>@lstByFolderType.Count</td>
+                    }
+                    <td>
+                        <button title="Upload" data-spid="@item.Id" data-spname="@item.Name" type="button"
+                            class="btn btn-primary btnUpload" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </button>
+
+                        <button title="Thống kê" data-spid="@item.Id" data-spname="@item.Name" type="button"
+                            class="btn btn-success btnThongKe" data-bs-toggle="modal" data-bs-target="#modalThongKe">
+                            <i class="fa-solid fa-chart-bar"></i></button>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="@(6+listSuffixFolderTypes.Length)" style="text-align: center;">Không tìm thấy dữ liệu</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<nav aria-label="Page navigation">
+
+    <ul class="pagination justify-content-center">
+        @if (Model.Count > 0)
+        {
+
+
+            if (ViewBag.PageIndex != 1)
+            {
+
+                <li class="page-item">
+                    <a class="page-link pageIndex" href="#" data-pageindex="1">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link pageIndex" href="#" data-pageindex="@(ViewBag.PageIndex - 1)">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            }
+
+            var pageIndex = (int)ViewBag.PageIndex;
+
+            var nodeCounts = (int)MathF.Ceiling(float.Parse(Model?[0].TotalRow.ToString()) / (int)ViewBag.PageSize);//này là
+                                                                                                                    //thực tế có bao nhiêu node có thể hiển thị dựa vào PageSize vả TotalRow
+            var nodeSize = 7;//này là input tùy chỉnh có bao nhiêu node hiển thị (muốn bao nhiêu thì chỉnh lại)
+            var nodeStart = (int)(pageIndex - MathF.Floor(nodeSize / 2)) <= 0 ? 1 : (int)(pageIndex - MathF.Floor(nodeSize /
+            2));//node bắt đầu
+            var nodeEnd = (nodeStart + nodeSize - 1) >= nodeCounts ? nodeCounts : (nodeStart + nodeSize - 1);//node kết thúc
+
+
+            if (nodeCounts >= nodeSize)//nếu có nhiều node hơn node size mặc định đề ra thì mới xử lý
+            {
+                var subtractNode = nodeEnd - nodeStart;
+                if (subtractNode != nodeSize - 1)// nếu nodeEnd - nodeStart mà ko đủ nodeSize => bù mấy node còn thiếu (xử lý
+                                                 // khi load những node cuối ko đủ nodeSize)
+                {
+                    nodeStart -= nodeSize - 1 - subtractNode;//thiếu bao nhiêu thì bù bấy nhiêu
+                }
+
+                if (nodeStart >= 2)//thêm ... đầu => nếu nodeStart >=2? vẽ ...
+                {
+                    <li class="page-item"><a class="page-link " href="#">...</a></li>
+                    nodeStart++;
+                }
+
+            }
+
+            for (int i = 1; i <= nodeCounts; i++)
+            {
+                if (i >= nodeStart && i <= nodeEnd)//nếu nằm trong khoảng start end
+                {
+                    if (i == nodeEnd && nodeEnd < nodeCounts)//thêm ... cuối => nếu là node cuối mà vẫn còn nữa THÌ ko vẽ node cuối
+                                                             // MÀ vẽ ...
+                    {
+                        <li class="page-item"><a class="page-link " href="#">...</a></li>
+                        break;
+                    }
+
+                    var active = pageIndex == i ? "active" : "";
+                    <li class="page-item @active"><a class="page-link pageIndex" data-pageindex="@i" href="#">@i</a></li>
+                }
+
+            }
+
+
+            if (ViewBag.PageIndex != nodeCounts)
+            {
+                <li class="page-item">
+                    <a class="page-link pageIndex" href="#" data-pageindex="@(ViewBag.PageIndex + 1)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link pageIndex" href="#" data-pageindex="@(nodeCounts)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            }
+        }
+
+    </ul>
+</nav>
+
+
+
+
+<script>
+    $().ready(() => {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            var tooltip = new bootstrap.Tooltip(tooltipTriggerEl, {
+                delay: { "show": 0, "hide": 3000 },
+                placement: 'left'
+            });
+            return tooltip;
+        });
+
+
+        $('.pageIndex').click((e) => {
+            pageIndex = e.currentTarget.dataset["pageindex"];
+            Search();
+
+        });
+
+        $('.btnUpload, .btnThongKe').click((e) => {
+            if (choosingUpload != e.currentTarget.dataset["spid"]) {
+                choosingUpload = e.currentTarget.dataset["spid"];
+                choosingUploadFileName = e.currentTarget.dataset["spname"];
+                $('#frmSanpham')[0].reset();
+                $('#divDS')[0].hidden = true;
+                $('#divDSTC')[0].innerHTML = "";
+                $('#divDSTB')[0].innerHTML = "";
+                $('#exampleModalLabel')[0].innerText = choosingUploadFileName;
+            }
+            choosingFolder = "";
+            $("#progressBar").width(0 + "%").text(0 + "%");
+
+        });
+
+        $('#frmSanpham').submit((e) => {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Bạn có chắc không?',
+                text: "Tải những file này lên server!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Không',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Có',
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+
+                    var files = $("#files").prop("files");
+                    var formData = new FormData();
+                    for (var i = 0; i < files.length; i++) {
+                        formData.append("formFiles", files[i]);
+                    }
+                    formData.append("sanPhamID", choosingUpload);
+                    formData.append("folderType", choosingFolder);
+                    $.ajax(
+                        {
+                            url: "/SanPham/Upload",
+                            type: "POST",
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            beforeSend: function () {
+                                $('#spinner-overlay').toggle();
+                                $("#progressBar").width("0%");
+                            },
+                            xhr: function () {
+                                var xhr = new window.XMLHttpRequest();
+                                xhr.upload.addEventListener("progress", function (e) {
+                                    if (e.lengthComputable) {
+                                        var progress = (e.loaded / e.total) * 100;
+                                        $("#progressBar").width(progress + "%").text(progress.toFixed(2) + "%");
+                                    }
+                                });
+                                return xhr;
+                            },
+                            success: function (result) {
+
+                                console.log(result);
+                                if (result.code != 0)//failed{
+                                {
+                                    toastr["error"](result.message);
+                                }
+                                else {
+                                    toastr["success"](result.message);
+                                    $('#divDS')[0].hidden = false;
+                                    $('#frmSanpham')[0].reset();
+
+                                    result.listSucceedResultURL.forEach(item => {
+                                        var a = document.createElement("a");
+                                        a.setAttribute("href", item);
+                                        a.setAttribute("class", "text-success");
+                                        a.setAttribute("target", "_blank");
+                                        a.setAttribute("style", "overflow: hidden;white-space: nowrap;");
+                                        a.innerHTML = item.substring(item.lastIndexOf("/") + 1);
+                                        document.getElementById("divDSTC").appendChild(a);
+
+                                    });
+                                    $('#divDS')[0].hidden = false;
+
+                                    result.listFailedResultURL.forEach(item => {
+                                        var a = document.createElement("b");
+                                        a.setAttribute("class", "text-danger");
+                                        a.innerHTML = item;
+
+                                        document.getElementById("divDSTB").appendChild(a);
+                                    });
+                                }
+                                $('#spinner-overlay').toggle();
+                                $("#progressBar").width("100%");
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                                toastr["error"]("Lỗi hệ thống");
+                                $("#progressBar").width("0%");
+                            }
+                        });
+
+                }
+            });
+        });
+
+
+        $('.btnThongKe').click((e) => {
+            var spid = e.currentTarget.dataset["spid"];
+            $.post('/SanPham/LoadThongKe/', { sanPhamID: spid }, (res) => {
+                $('#divDSThongKe').html(res);
+            });
+        });
+    });
+</script>
